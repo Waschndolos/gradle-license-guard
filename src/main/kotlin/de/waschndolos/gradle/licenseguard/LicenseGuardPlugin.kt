@@ -8,7 +8,7 @@ class LicenseGuardPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         with(project) {
-            tasks.create("licenseGuard", LicenseReportTask::class.java)
+            tasks.create("createLicenseReport", LicenseReportTask::class.java)
         }
     }
 }
