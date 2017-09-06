@@ -52,7 +52,7 @@ open class LicenseReportTask : DefaultTask() {
         licensesFromManifest.forEach { key, value ->
             dependencyInformations.add(DependencyInformation(key, value, "manifest"))
         }
-        println("2 -done...")
+        println("2 - done...")
 
         println("3 - Creating now License report in " + outputFile.path)
         val licenseReport = LicenseReport(dependencyInformations)
