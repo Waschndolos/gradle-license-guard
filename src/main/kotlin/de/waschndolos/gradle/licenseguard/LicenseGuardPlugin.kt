@@ -6,14 +6,9 @@ import org.gradle.api.Project
 
 class LicenseGuardPlugin : Plugin<Project> {
 
-
     override fun apply(project: Project) {
-
         with(project) {
-
-            val licenseGuardTask = tasks.create("licenseGuard", LicenseGuardTask::class.java)
+            tasks.create("licenseGuard", LicenseGuardTask::class.java)
         }
-
     }
-
 }

@@ -1,6 +1,8 @@
 package de.waschndolos.gradle.licenseguard.parsing
 
-import org.gradle.internal.impldep.org.apache.maven.model.io.xpp3.MavenXpp3Reader
+
+
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader
 import java.io.ByteArrayInputStream
 import java.io.File
 
