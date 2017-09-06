@@ -8,14 +8,17 @@ class ManifestParser {
 
     fun parseManifest(file : File) : List<String> {
 
-        val licenses : MutableList<String> = mutableListOf<String>()
+        val licenses : MutableList<String> = mutableListOf()
         val jarStream = JarInputStream(FileUtils.openInputStream(file))
 
         val manifest = jarStream.manifest
 
-        val licenseInformation = manifest.mainAttributes.getValue("Bundle-License").toString()
-        if (licenseInformation.isNotEmpty()) {
-            licenses.add(licenseInformation)
+        val mainAttributes = manifest.mainAttributes
+        if (mainAttributes != null) {
+            val licenseInformation = mainAttributes.getValue("Bundle-License")
+            if (licenseInformation != null && licenseInformation.isNotEmpty()) {
+                licenses.add(licenseInformation)
+            }
         }
 
         return licenses
