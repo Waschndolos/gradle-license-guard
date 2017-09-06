@@ -11,7 +11,7 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
-open class LicenseGuardTask : DefaultTask() {
+open class LicenseReportTask : DefaultTask() {
 
     @OutputFile
     private val outputFile: File = File(project.rootProject.buildDir.path + "/report/license-report.xml")
