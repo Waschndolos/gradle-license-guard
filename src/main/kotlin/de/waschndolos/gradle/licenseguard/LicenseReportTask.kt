@@ -24,13 +24,18 @@ open class LicenseReportTask : DefaultTask() {
     @TaskAction
     fun createReport() {
 
-        println("Starting to create License report of configuration \"compile\" for project " + project.name)
+        println("Starting to create License report of configuration \"runtime\" for project " + project.name)
 
         project.configurations.create("poms")
 
-        project.configurations.getByName("compile").resolvedConfiguration.lenientConfiguration.artifacts.forEach { resolvedArtifact ->
+        project.configurations.getByName("runtime").resolvedConfiguration.lenientConfiguration.artifacts.forEach { resolvedArtifact ->
             val id = resolvedArtifact.moduleVersion.id
-            project.dependencies.add("poms", id.group + ":" + id.name + ":" + id.version + "@pom")
+
+            var name = resolvedArtifact.name
+            if (name == null) {
+                name = id.name
+            }
+            project.dependencies.add("poms", id.group + ":" + resolvedArtifact.name + ":" + id.version + "@pom")
         }
 
         outputFile.parentFile.mkdirs()
@@ -71,7 +76,7 @@ open class LicenseReportTask : DefaultTask() {
         val licenses : MutableMap<String, List<String> > = mutableMapOf()
 
         val manifestParser = ManifestParser()
-        project.configurations.getByName("compile").forEach{ file ->
+        project.configurations.getByName("runtime").forEach{ file ->
 
             if (missingLicenses.contains(file.name.removeSuffix(".jar"))) {
                 val license = manifestParser.parseManifest(file)

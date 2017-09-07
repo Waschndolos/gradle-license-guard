@@ -14,11 +14,11 @@ class PomParser {
         val byteArrayInputStream = ByteArrayInputStream(pom.readBytes())
         val read = mavenXpp3Reader.read(byteArrayInputStream)
 
-        val licenses : MutableList<String> = mutableListOf<String>()
+        val licenses : MutableList<String> = mutableListOf()
 
-        for(license in read.licenses) {
-            licenses.add(license.name)
-        }
+        read.licenses
+                .filter { it.name != null }
+                .mapTo(licenses) { it.name }
 
         return licenses
     }
