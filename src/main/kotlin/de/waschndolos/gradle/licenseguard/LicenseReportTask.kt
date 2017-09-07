@@ -35,7 +35,7 @@ open class LicenseReportTask : DefaultTask() {
             if (name == null) {
                 name = id.name
             }
-            project.dependencies.add("poms", id.group + ":" + resolvedArtifact.name + ":" + id.version + "@pom")
+            project.dependencies.add("poms", id.group + ":" + name + ":" + id.version + "@pom")
         }
 
         outputFile.parentFile.mkdirs()
