@@ -7,7 +7,6 @@ import de.waschndolos.gradle.licenseguard.model.LicenseReport
 import de.waschndolos.gradle.licenseguard.parsing.ManifestParser
 import de.waschndolos.gradle.licenseguard.parsing.PomParser
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -71,7 +70,7 @@ open class LicenseReportTask : DefaultTask() {
         println("3 - done...")
     }
 
-    fun collectLicensesFromManifest(missingLicenses: Set<String>): MutableMap<String, List<String>> {
+    private fun collectLicensesFromManifest(missingLicenses: Set<String>): MutableMap<String, List<String>> {
         project.logger.info("Checking Licenses from Manifest...")
 
         val licenses : MutableMap<String, List<String> > = mutableMapOf()
@@ -89,7 +88,7 @@ open class LicenseReportTask : DefaultTask() {
     }
 
 
-    fun collectLicensesFromPOM() : MutableMap<String, List<String> > {
+    private fun collectLicensesFromPOM() : MutableMap<String, List<String> > {
         project.logger.info("Checking Licenses from pom...")
 
         val licenses : MutableMap<String, List<String> > = mutableMapOf()
