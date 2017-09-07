@@ -7,6 +7,7 @@ import de.waschndolos.gradle.licenseguard.model.LicenseReport
 import de.waschndolos.gradle.licenseguard.parsing.ManifestParser
 import de.waschndolos.gradle.licenseguard.parsing.PomParser
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -60,7 +61,7 @@ open class LicenseReportTask : DefaultTask() {
         println("2 - done...")
 
         println("3 - Creating now License report in " + outputFile.path)
-        val licenseReport = LicenseReport(dependencyInformations)
+        val licenseReport = LicenseReport(project.name, dependencyInformations)
 
         val xmlMapper = XmlMapper()
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT) // pretty print
