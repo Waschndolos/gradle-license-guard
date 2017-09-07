@@ -6,19 +6,31 @@ import de.waschndolos.gradle.licenseguard.model.DependencyInformation
 import de.waschndolos.gradle.licenseguard.model.LicenseReport
 import de.waschndolos.gradle.licenseguard.parsing.ManifestParser
 import de.waschndolos.gradle.licenseguard.parsing.PomParser
+import de.waschndolos.gradle.licenseguard.report.PdfReportCreator
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
+import java.util.*
 
 open class LicenseReportTask : DefaultTask() {
 
     @OutputFile
-    private val outputFile: File = File(project.rootProject.buildDir.path + "/report/license-report.xml")
+    val outputFile: File = File(project.buildDir.path + "/report/" + project.name + "_license-report.pdf")
+
+
+    @InputFile
+    private val logo: File = File(project.projectDir.path + "/logo.png")
+
+    @Input
+    private val reportDescription: String = "This reports lists all dependencies of " + project.name + ". " +
+            "It shall give you an overview about your 3rd party licenses."
 
     init {
         group = "license"
-        description = "Checks your external dependencies license information and generates a report"
+        description = "Checks your external dependencies license information and generates a pdf report"
     }
 
     @TaskAction
@@ -60,14 +72,29 @@ open class LicenseReportTask : DefaultTask() {
         println("2 - done...")
 
         println("3 - Creating now License report in " + outputFile.path)
-        val licenseReport = LicenseReport(project.name, dependencyInformations)
+
+        var logoBase64 = ""
+        if (logo != null) {
+          logoBase64 = Base64.getEncoder().encodeToString(logo.readBytes())
+        }
+        val licenseReport = LicenseReport(project.name, dependencyInformations, logoBase64, reportDescription)
 
         val xmlMapper = XmlMapper()
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT) // pretty print
+        xmlMapper.enable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
 
-        xmlMapper.writeValue(outputFile, licenseReport)
+        val xmlFile = File(project.buildDir.path + "/report/" + project.name + "_license-report-data.xml")
+        xmlMapper.writeValue(xmlFile, licenseReport)
 
         println("3 - done...")
+
+
+        println("4 - Creating now PDF report")
+
+        val pdfReportCreator = PdfReportCreator()
+        pdfReportCreator.createPdfFromXmlReport(xmlFile, outputFile.path)
+
+        println("4 - done...")
     }
 
     private fun collectLicensesFromManifest(missingLicenses: Set<String>): MutableMap<String, List<String>> {
