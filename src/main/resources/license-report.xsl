@@ -5,16 +5,12 @@
         <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
             <fo:layout-master-set>
                 <fo:simple-page-master master-name="simpleA4" page-height="29.7cm" page-width="21cm" margin-top="2cm"
-                                       margin-bottom="2cm" margin-left="2cm" margin-right="2cm">
+                                       margin-bottom="2cm" margin-left="1cm" margin-right="1cm">
                     <fo:region-body/>
                 </fo:simple-page-master>
             </fo:layout-master-set>
             <fo:page-sequence master-reference="simpleA4">
                 <fo:flow flow-name="xsl-region-body">
-                    <fo:block font-size="12pt" font-weight="bold" space-after="5mm">
-                        <xsl:value-of select="description"/>
-                    </fo:block>
-                    <fo:block/>
                     <fo:block>
                         <xsl:if test="base64EncodedImage/text()">
                         <fo:external-graphic>
@@ -27,13 +23,18 @@
                         </fo:external-graphic>
                         </xsl:if>
                     </fo:block>
+                    <fo:block/>
+                    <fo:block font-size="12pt" font-weight="bold" space-after="5mm">
+                        <xsl:value-of select="description"/>
+                    </fo:block>
+                    <fo:block/>
                     <fo:block font-size="12pt" font-weight="bold" space-after="5mm">Project Name:
                         <xsl:value-of select="projectName"/>
                     </fo:block>
                     <fo:block/>
                     <fo:block font-size="10pt">
                         <fo:table table-layout="fixed" width="100%" border-collapse="separate">
-                            <fo:table-column column-width="5cm"/>
+                            <fo:table-column column-width="7cm"/>
                             <fo:table-column column-width="10cm"/>
                             <fo:table-column column-width="2cm"/>
                             <fo:table-header background="#FFFF00">

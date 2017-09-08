@@ -77,6 +77,8 @@ open class LicenseReportTask : DefaultTask() {
         if (logo != null) {
           logoBase64 = Base64.getEncoder().encodeToString(logo.readBytes())
         }
+
+        dependencyInformations.sortBy { (name) -> name }
         val licenseReport = LicenseReport(project.name, dependencyInformations, logoBase64, reportDescription)
 
         val xmlMapper = XmlMapper()
