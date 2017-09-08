@@ -9,7 +9,6 @@ import de.waschndolos.gradle.licenseguard.parsing.PomParser
 import de.waschndolos.gradle.licenseguard.report.PdfReportCreator
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -21,8 +20,8 @@ open class LicenseReportTask : DefaultTask() {
     val outputFile: File = File(project.buildDir.path + "/report/" + project.name + "_license-report.pdf")
 
 
-    @InputFile
-    private val logo: File = File(project.projectDir.path + "/logo.png")
+    @Input
+    private var logo: String? = null
 
     @Input
     private val reportDescription: String = "This reports lists all dependencies of " + project.name + ". " +
@@ -75,7 +74,7 @@ open class LicenseReportTask : DefaultTask() {
 
         var logoBase64 = ""
         if (logo != null) {
-          logoBase64 = Base64.getEncoder().encodeToString(logo.readBytes())
+          logoBase64 = Base64.getEncoder().encodeToString(File(logo).readBytes())
         }
 
         dependencyInformations.sortBy { (name) -> name }
