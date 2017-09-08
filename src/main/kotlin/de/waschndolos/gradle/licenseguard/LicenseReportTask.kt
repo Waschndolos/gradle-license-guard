@@ -7,6 +7,7 @@ import de.waschndolos.gradle.licenseguard.model.LicenseReport
 import de.waschndolos.gradle.licenseguard.parsing.ManifestParser
 import de.waschndolos.gradle.licenseguard.parsing.PomParser
 import de.waschndolos.gradle.licenseguard.report.PdfReportCreator
+import de.waschndolos.gradle.licenseguard.report.RtfReportCreator
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
@@ -17,7 +18,7 @@ import java.util.*
 open class LicenseReportTask : DefaultTask() {
 
     @OutputFile
-    val outputFile: File = File(project.buildDir.path + "/report/" + project.name + "_license-report.pdf")
+    val outputFile: File = File(project.buildDir.path + "/report/" + project.name + "_license-report")
 
 
     @Input
@@ -93,9 +94,16 @@ open class LicenseReportTask : DefaultTask() {
         println("4 - Creating now PDF report")
 
         val pdfReportCreator = PdfReportCreator()
-        pdfReportCreator.createPdfFromXmlReport(xmlFile, outputFile.path)
+        pdfReportCreator.createReport(xmlFile, outputFile.path)
 
         println("4 - done...")
+        println("Report created: " + outputFile.path)
+
+        println("5 - Creating now RTF report")
+        val rtfReportCreator = RtfReportCreator()
+        rtfReportCreator.createReport(xmlFile, outputFile.path)
+        println("5 - done...")
+
     }
 
     private fun collectLicensesFromManifest(missingLicenses: Set<String>): MutableMap<String, List<String>> {
@@ -132,7 +140,4 @@ open class LicenseReportTask : DefaultTask() {
 
         return licenses
     }
-
-
-
 }
