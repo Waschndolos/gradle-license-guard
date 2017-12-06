@@ -2,6 +2,8 @@ package de.waschndolos.gradle.licenseguard
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import de.waschndolos.gradle.licenseguard.conversion.DependencyInformationsToHintConverter
+import de.waschndolos.gradle.licenseguard.conversion.MapToDependencyInformationConverter
 import de.waschndolos.gradle.licenseguard.model.DependencyInformation
 import de.waschndolos.gradle.licenseguard.model.LicenseReport
 import de.waschndolos.gradle.licenseguard.parsing.ManifestParser
@@ -20,13 +22,17 @@ open class LicenseReportTask : DefaultTask() {
     @OutputFile
     val outputFile: File = File(project.buildDir.path + "/report/" + project.name + "_license-report")
 
+    @Input
+    var licenseMap: Map<String, String> = mutableMapOf()
 
     @Input
-    private var logo: String? = null
+    var logo: String? = null
 
     @Input
-    private val reportDescription: String = "This reports lists all dependencies of " + project.name + ". " +
-            "It shall give you an overview about your 3rd party licenses."
+    var projectName: String? = project.name
+
+    @Input
+    var excludedDependencies: List<String> = mutableListOf()
 
     init {
         group = "license"
@@ -36,7 +42,7 @@ open class LicenseReportTask : DefaultTask() {
     @TaskAction
     fun createReport() {
 
-        println("Starting to create License report of configuration \"runtime\" for project " + project.name)
+        println("Starting to create License report of configuration \"runtime\" for project " + projectName)
 
         project.configurations.create("poms")
 
@@ -71,15 +77,45 @@ open class LicenseReportTask : DefaultTask() {
         }
         println("2 - done...")
 
-        println("3 - Creating now License report in " + outputFile.path)
+        println("3 - Adding manually determined Licenses.")
+        excludedDependencies.forEach { excludedDIName ->
+            val foundDIs = mutableListOf<DependencyInformation>()
+
+            dependencyInformations.forEach { di ->
+                if (Regex(excludedDIName).matches(di.name)) {
+                    foundDIs.add(di)
+                }
+            }
+            foundDIs.forEach { foundDI ->
+                dependencyInformations.remove(foundDI)
+            }
+        }
+
+        MapToDependencyInformationConverter().convert(licenseMap).forEach { manualDI ->
+            val foundDIs = mutableListOf<DependencyInformation>()
+            dependencyInformations.forEach { di ->
+                if (di.name.startsWith(manualDI.name)) {
+                    foundDIs.add(di)
+                }
+            }
+            foundDIs.forEach { foundDI ->
+                dependencyInformations.remove(foundDI)
+                dependencyInformations.add(manualDI)
+            }
+
+        }
+        println("3 - done...")
+
+        println("4 - Creating now License report in " + outputFile.path)
 
         var logoBase64 = ""
-        if (logo != null) {
+        if (logo != null && "" != logo) {
           logoBase64 = Base64.getEncoder().encodeToString(File(logo).readBytes())
         }
 
         dependencyInformations.sortBy { (name) -> name }
-        val licenseReport = LicenseReport(project.name, dependencyInformations, logoBase64, reportDescription)
+        val licenseReport = LicenseReport(projectName, dependencyInformations, logoBase64, "This reports lists all dependencies of " + projectName + ". " +
+                "It shall give you an overview about your 3rd party licenses.")
 
         val xmlMapper = XmlMapper()
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT) // pretty print
@@ -88,21 +124,29 @@ open class LicenseReportTask : DefaultTask() {
         val xmlFile = File(project.buildDir.path + "/report/" + project.name + "_license-report-data.xml")
         xmlMapper.writeValue(xmlFile, licenseReport)
 
-        println("3 - done...")
+        println("4 - done...")
 
-
-        println("4 - Creating now PDF report")
+        println("5 - Creating now PDF report")
 
         val pdfReportCreator = PdfReportCreator()
         pdfReportCreator.createReport(xmlFile, outputFile.path)
 
-        println("4 - done...")
+        println("5 - done...")
         println("Report created: " + outputFile.path)
 
-        println("5 - Creating now RTF report")
+        println("6 - Creating now RTF report")
         val rtfReportCreator = RtfReportCreator()
         rtfReportCreator.createReport(xmlFile, outputFile.path)
-        println("5 - done...")
+        println("6 - done...")
+
+        val noLicensesFound = dependencyInformations.filter { dep -> dep.license.isEmpty() }
+
+        if (noLicensesFound.isNotEmpty()) {
+            println("------------------------")
+            println("Add this to your task configuration and fill out missing licenses manually:")
+            println(DependencyInformationsToHintConverter().convert(noLicensesFound))
+            println("------------------------")
+        }
 
     }
 
