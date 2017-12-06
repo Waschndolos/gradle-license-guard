@@ -44,11 +44,7 @@ You don't need to specify parameters but in case you want some minor customizati
     }
 
 
-### Apply the plugin in your build.gradle file
-
-
-    apply plugin: 'de.waschndolos.licenseguard'
-        
+### Configure a task      
         
     task createThirdPartyLicenseReport(type: de.waschndolos.gradle.licenseguard.LicenseReportTask, dependsOn: build) {
 	    projectName = "My Project"
