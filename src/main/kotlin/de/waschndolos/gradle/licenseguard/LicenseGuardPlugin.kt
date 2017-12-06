@@ -7,8 +7,6 @@ import org.gradle.api.Project
 class LicenseGuardPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        with(project) {
-            tasks.create("createLicenseReport", LicenseReportTask::class.java)
-        }
+
     }
 }

@@ -34,11 +34,6 @@ open class LicenseReportTask : DefaultTask() {
     @Input
     var excludedDependencies: List<String> = mutableListOf()
 
-    init {
-        group = "license"
-        description = "Checks your external dependencies license information and generates a pdf report"
-    }
-
     @TaskAction
     fun createReport() {
 
