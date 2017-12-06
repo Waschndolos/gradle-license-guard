@@ -1,5 +1,4 @@
-About
-=====
+# About
 
 This repository contains source code for a gradle plugin called gradle-license-guard. 
 It's able to generate a report of the licenses of your 3rd party dependencies. I developed it to have an automated way to generate such reports and to remove the manual work.
@@ -7,8 +6,17 @@ It's able to generate a report of the licenses of your 3rd party dependencies. I
 It all started as a tryout for Kotlin language so feel free to contribute if you want :)
 
 
-Configuration
-=============
+# Configuration
+
+This section describes how you can use the Plugin. It will not create a default task so you need to
+create one by your own. An example can be seen below. 
+You don't need to specify parameters but in case you want some minor customizations you can specify the following:
+
+| Parameter | Purpose | Type | Example |
+|-----------|---------|------|---------|
+|projectName|You can add a custom project name if you want|String|projectName="myProject"|
+
+
 
 ### import the plugin into your build script (old way)
 
@@ -47,3 +55,5 @@ Configuration
 	    outputFormat = "pdf" // Supported: pdf, rtf
 	    configuration = "runtime" // For which gradle configuration the report shall be created
     }
+
+
