@@ -34,6 +34,9 @@ open class LicenseReportTask : DefaultTask() {
     @Input
     var excludedDependencies: List<String> = mutableListOf()
 
+    @Input
+    var outputFormat: List<String> = mutableListOf("pdf")
+
     @TaskAction
     fun createReport() {
 
@@ -121,18 +124,16 @@ open class LicenseReportTask : DefaultTask() {
 
         println("4 - done...")
 
-        println("5 - Creating now PDF report")
+        println("5 - Creating now reports")
 
-        val pdfReportCreator = PdfReportCreator()
-        pdfReportCreator.createReport(xmlFile, outputFile.path)
+        if (outputFormat.contains("pdf")) {
+            PdfReportCreator().createReport(xmlFile, outputFile.path)
+        }
 
+        if (outputFormat.contains("rtf")) {
+            RtfReportCreator().createReport(xmlFile, outputFile.path)
+        }
         println("5 - done...")
-        println("Report created: " + outputFile.path)
-
-        println("6 - Creating now RTF report")
-        val rtfReportCreator = RtfReportCreator()
-        rtfReportCreator.createReport(xmlFile, outputFile.path)
-        println("6 - done...")
 
         val noLicensesFound = dependencyInformations.filter { dep -> dep.license.isEmpty() }
 
@@ -142,6 +143,8 @@ open class LicenseReportTask : DefaultTask() {
             println(DependencyInformationsToHintConverter().convert(noLicensesFound))
             println("------------------------")
         }
+
+        xmlFile.delete()
 
     }
 
