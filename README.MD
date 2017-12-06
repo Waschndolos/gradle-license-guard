@@ -10,11 +10,34 @@ It all started as a tryout for Kotlin language so feel free to contribute if you
 Configuration
 =============
 
+### import the plugin into your build script (old way)
 
-`apply plugin: 'de.waschndolos.licenseguard'`
+    buildscript {
+      repositories {
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
+      }
+      dependencies {
+        classpath "gradle.plugin.de.waschndolos:gradle-license-guard:1.0"
+      }
+    }
+    
+    apply plugin: "de.waschndolos.licenseguard"
+
+### use new plugin mechanism
+
+    plugins {
+      id "de.waschndolos.licenseguard" version "1.0"
+    }
 
 
+### Apply the plugin in your build.gradle file
 
+
+    apply plugin: 'de.waschndolos.licenseguard'
+        
+        
     task createThirdPartyLicenseReport(type: de.waschndolos.gradle.licenseguard.LicenseReportTask, dependsOn: build) {
 	    projectName = "My Project" // custom project name. Default= project.name
 	    licenseMap = ["spring-boot-1.5.9.RELEASE": "Some License", // manually add license information
