@@ -7,6 +7,6 @@ import org.gradle.api.Project
 class LicenseGuardPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-
+        // do default task
     }
 }

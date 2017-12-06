@@ -2,7 +2,7 @@ package de.waschndolos.gradle.licenseguard.conversion
 
 import de.waschndolos.gradle.licenseguard.model.DependencyInformation
 
-class MapToDependencyInformationConverter {
+class MapToDIConverter {
 
 
     fun convert(input : Map<String, String>) : List<DependencyInformation> {

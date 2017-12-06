@@ -2,7 +2,7 @@ package de.waschndolos.gradle.licenseguard.conversion
 
 import de.waschndolos.gradle.licenseguard.model.DependencyInformation
 
-class DependencyInformationsToHintConverter {
+class DIToConfigurationHintConverter {
 
     fun convert(input : List<DependencyInformation> ) : String {
 
