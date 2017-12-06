@@ -12,9 +12,14 @@ This section describes how you can use the Plugin. It will not create a default 
 create one by your own. An example can be seen below. 
 You don't need to specify parameters but in case you want some minor customizations you can specify the following:
 
-| Parameter | Purpose | Type | Example |
-|-----------|---------|------|---------|
-|projectName|You can add a custom project name if you want|String|projectName="myProject"|
+| Parameter | Purpose | Type | Example | Default |
+|-----------|---------|------|---------|---------|
+|projectName|You can add a custom project name if you want|String|projectName="myProject"|project.name|
+|licenseMap|If the plugin can't determine the license you can add it manually here|Map|licenseMap= ["myjar-2.jar":"someLicense"]|""|
+|logo|Define a custom logo url which will then be inserted into your report|String|logo="${project.projectDir.path}/mylogo.png"|""|
+|excludedDependencies|Define dependencies which shall not appear in the report. You can use simple Regex (i hope^^)|List<String>|excludedDependencies=["custom.*"]|""|
+|outputFormat|Define the output format. It can be "pdf" or "rtf"|String|outputFormat=pdf|pdf|
+|configuration|Define for which gradle configuration the report is|String|configuration=runtime|runtime|
 
 
 
@@ -47,13 +52,12 @@ You don't need to specify parameters but in case you want some minor customizati
         
         
     task createThirdPartyLicenseReport(type: de.waschndolos.gradle.licenseguard.LicenseReportTask, dependsOn: build) {
-	    projectName = "My Project" // custom project name. Default= project.name
-	    licenseMap = ["spring-boot-1.5.9.RELEASE": "Some License", // manually add license information
-				                          "slf4j-api-1.7.25": "Some Other License"]          // for unknown dependencies
-	    logo = "${project.projectDir.path}/myLogo.png" // custom logo url
-	    excludedDependencies = ["custom-jar.*", "postgresql.*"] // Exclude Dependencies from the report
-	    outputFormat = "pdf" // Supported: pdf, rtf
-	    configuration = "runtime" // For which gradle configuration the report shall be created
+	    projectName = "My Project"
+	    licenseMap = ["spring-boot-1.5.9.RELEASE": "Some License", "slf4j-api-1.7.25": "Some Other License"]          
+	    logo = "${project.projectDir.path}/myLogo.png"
+	    excludedDependencies = ["custom-jar.*", "postgresql.*"]
+	    outputFormat = "pdf"
+	    configuration = "runtime"
     }
 
 
