@@ -62,3 +62,6 @@ You don't need to specify parameters but in case you want some minor customizati
 ### Important information
 This plugin has only been tested in a couple of environments. If you encounter an issue let me know or provide 
 a pull request. Thank you :)
+
+### Contributions
+This is an open source software licensed under the Apache License Version 2.0. Feel free to open issues or pull requests.
