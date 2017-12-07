@@ -27,7 +27,7 @@ pluginBundle {
     website = 'https://github.com/Waschndolos/gradle-license-guard'
     vcsUrl = 'https://github.com/Waschndolos/gradle-license-guard.git'
     plugins {
-        greetingsPlugin {
+        licenseGuard {
             id = 'de.waschndolos.licenseguard'
             displayName = 'Gradle license guard'
             description = 'The Gradle license guard plugin can be used to generate a report of the licenses ' +
