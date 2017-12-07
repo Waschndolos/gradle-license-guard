@@ -17,8 +17,8 @@ class CreateXMLCommand {
             logoBase64 = Base64.getEncoder().encodeToString(File(logo).readBytes())
         }
 
-        dependencyInformations.sortedBy { it.name }
-        val licenseReport = LicenseReport(projectName, dependencyInformations, logoBase64, "This reports lists all dependencies of " + projectName + ". " +
+        val sortedList  = dependencyInformations.sortedBy { it.name }
+        val licenseReport = LicenseReport(projectName, sortedList, logoBase64, "This reports lists all dependencies of " + projectName + ". " +
                 "It shall give you an overview about your 3rd party licenses.")
 
         val xmlMapper = XmlMapper()

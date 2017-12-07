@@ -4,8 +4,8 @@ import de.waschndolos.gradle.licenseguard.model.DependencyInformation
 
 class DetermineEmptyLicenseCommand {
 
-    fun execute(input: List<DependencyInformation>): Set<String> {
-        val missingLicenses = mutableSetOf<String>()
+    fun execute(input: List<DependencyInformation>): List<String> {
+        val missingLicenses = mutableListOf<String>()
 
         input.filter{ it.license.isEmpty() }.forEach{ missingLicenses.add(it.name) }
 

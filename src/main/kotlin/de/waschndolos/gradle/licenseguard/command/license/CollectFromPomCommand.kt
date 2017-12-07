@@ -6,7 +6,7 @@ import org.gradle.api.Project
 
 class CollectFromPomCommand {
 
-    fun execute(input: Project): List<DependencyInformation> {
+    fun execute(input: Project, dependencyInformations: MutableList<DependencyInformation>): List<DependencyInformation> {
 
         input.logger.info("Checking Licenses from pom...")
 
@@ -21,10 +21,8 @@ class CollectFromPomCommand {
             licenses.put(pom.name.removeSuffix(".pom"), parseLicense)
         }
 
-        val dependencyInformations = mutableListOf<DependencyInformation>()
-
         licenses.forEach { key, value ->
-            dependencyInformations.add(DependencyInformation(key, value, "pom"))
+            dependencyInformations.add(DependencyInformation(key + ".jar", value, "pom"))
         }
 
         return dependencyInformations

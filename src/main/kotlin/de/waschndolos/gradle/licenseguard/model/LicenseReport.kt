@@ -11,5 +11,4 @@ data class LicenseReport(val projectName: String?,
         return "LicenseReport(dependencyInformation=$dependencyInformation)"
     }
 
-
 }

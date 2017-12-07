@@ -24,8 +24,8 @@ abstract class ReportCreator {
 
         val outputStream = FileOutputStream(outputPath + getEnding(format()))
 
-        outputStream.use { outputStream ->
-            val fop = fopFactory.newFop(format(), foUserAgent, outputStream)
+        outputStream.use { os ->
+            val fop = fopFactory.newFop(format(), foUserAgent, os)
 
             val factory = TransformerFactory.newInstance()
             val transformer = factory.newTransformer(StreamSource(StringReader(xsltFile)))

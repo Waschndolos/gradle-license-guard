@@ -6,12 +6,12 @@ import de.waschndolos.gradle.licenseguard.command.license.CollectFromPluginConfi
 import de.waschndolos.gradle.licenseguard.command.license.CollectFromPomCommand
 import de.waschndolos.gradle.licenseguard.command.report.CreateReportCommand
 import de.waschndolos.gradle.licenseguard.command.report.CreateXMLCommand
+import de.waschndolos.gradle.licenseguard.model.DependencyInformation
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.util.*
 
 open class LicenseReportTask : DefaultTask() {
 
@@ -44,17 +44,18 @@ open class LicenseReportTask : DefaultTask() {
         project.logger.lifecycle("Starting to create License report of configuration \"{}\" for project {}", configuration, projectName)
         CreatePomConfigurationCommand().execute(project, configuration)
 
+        val dependencyInformations = mutableListOf<DependencyInformation>()
         project.logger.lifecycle("Collecting license information from pom.")
-        var dependencyInformations = CollectFromPomCommand().execute(project)
+        CollectFromPomCommand().execute(project, dependencyInformations)
 
         project.logger.lifecycle("Determine missing licenses.")
         val missingLicenses = DetermineEmptyLicenseCommand().execute(dependencyInformations)
 
         project.logger.lifecycle("Collecting license information from manifest.")
-        dependencyInformations.plus(CollectFromManifest(project, configuration).execute(missingLicenses))
+        CollectFromManifest(project, configuration).execute(missingLicenses, dependencyInformations)
 
         project.logger.lifecycle("Collecting licenses from plugin configuration.")
-        dependencyInformations = CollectFromPluginConfigurationCommand(excludedDependencies, licenseMap).execute(dependencyInformations)
+        CollectFromPluginConfigurationCommand(excludedDependencies, licenseMap).execute(dependencyInformations)
 
         project.logger.lifecycle("Creating now license report.")
         val xmlFile = CreateXMLCommand().execute(project, logo, dependencyInformations, projectName)
