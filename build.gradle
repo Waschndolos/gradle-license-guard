@@ -14,7 +14,7 @@ plugins {
     id 'java-gradle-plugin'
 }
 group = 'de.waschndolos'
-version = '1.0'
+version = '1.2.0'
 
 apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
@@ -33,7 +33,7 @@ pluginBundle {
             description = 'The Gradle license guard plugin can be used to generate a report of the licenses ' +
                           'of 3rd party dependencies used in your project'
             tags = ['license', 'reporting']
-            version = '1.0'
+            version = "${project.version}"
         }
     }
 }
@@ -46,8 +46,6 @@ dependencies {
     compile "commons-io:commons-io:2.5"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.0"
     compile "org.apache.xmlgraphics:fop:2.2"
-
-
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3'
 

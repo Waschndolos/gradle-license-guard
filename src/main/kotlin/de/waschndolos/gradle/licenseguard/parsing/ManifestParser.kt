@@ -13,11 +13,14 @@ class ManifestParser {
 
         val manifest = jarStream.manifest
 
-        val mainAttributes = manifest.mainAttributes
-        if (mainAttributes != null) {
-            val licenseInformation = mainAttributes.getValue("Bundle-License")
-            if (licenseInformation != null && licenseInformation.isNotEmpty()) {
-                licenses.add(licenseInformation)
+        if (manifest != null) {
+
+            val mainAttributes = manifest.mainAttributes
+            if (mainAttributes != null) {
+                val licenseInformation = mainAttributes.getValue("Bundle-License")
+                if (licenseInformation != null && licenseInformation.isNotEmpty()) {
+                    licenses.add(licenseInformation)
+                }
             }
         }
 

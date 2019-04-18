@@ -17,7 +17,7 @@ You don't need to specify parameters but in case you want some minor customizati
 |projectName|You can add a custom project name if you want|String|projectName="myProject"|project.name|
 |licenseMap|If the plugin can't determine the license you can add it manually here|Map|licenseMap= ["myjar-2.jar":"someLicense"]|""|
 |logo|Define a custom logo url which will then be inserted into your report|String|logo="${project.projectDir.path}/mylogo.png"|""|
-|excludedDependencies|Define dependencies which shall not appear in the report. You can use simple Regex (i hope^^)|List<String>|excludedDependencies=["custom.*"]|""|
+|excludedDependencies|Define dependencies which shall not appear in the report. You can use simple Regex|List<String>|excludedDependencies=["custom.*"]|""|
 |outputFormat|Define the output format. It can be "pdf" or "rtf"|String|outputFormat=pdf|pdf|
 |configuration|Define for which gradle configuration the report is|String|configuration=runtime|runtime|
 
@@ -31,7 +31,7 @@ You don't need to specify parameters but in case you want some minor customizati
         }
       }
       dependencies {
-        classpath "gradle.plugin.de.waschndolos:gradle-license-guard:1.0"
+        classpath "gradle.plugin.de.waschndolos:gradle-license-guard:1.2.0"
       }
     }
     
@@ -40,7 +40,7 @@ You don't need to specify parameters but in case you want some minor customizati
 ### Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 
     plugins {
-      id "de.waschndolos.licenseguard" version "1.0"
+      id "de.waschndolos.licenseguard" version "1.2.0"
     }
 
 
